@@ -1,29 +1,22 @@
 const Blog = require("../model/Blog");
-const upload = require("../Middleware/Multer");
 
 const Create = async (req, res) => {
   try {
     const { Name, Description, liked } = req.body;
-
     if (!Name || !Description || liked === undefined) {
       return res.status(400).json({ message: "All fields are required" });
     }
-
     if (!req.file) {
       return res.status(400).json({ message: "Image is required" });
     }
-
     const imageUrl = `http://localhost:3000/Uploader/${req.file.filename}`;
-
     const newBlog = new Blog({
       Name,
       Description,
       liked,
       Image: imageUrl,
     });
-
     await newBlog.save();
-
     return res
       .status(201)
       .json({ message: "Blog created successfully", Blog: newBlog });
@@ -48,48 +41,48 @@ const AllBlogs = async (req, res) => {
 const updateBlog = async (req, res) => {
   try {
     const { id } = req.params;
-
-    upload.single("image")(req, res, async (err) => {
-      if (err) {
-        return res.status(400).json({ message: err.message });
-      }
-
-      const existBlog = await Blog.findById({ _id: id });
-      if (!existBlog) {
-        return res
-          .status(404)
-          .json({ message: "Blog with this id does not exist" });
-      }
-
-      const { Name, Description, liked } = req.body;
-
-      let imageUrl = existBlog.imageUrl;
-
-      if (req.file) {
-        
-        imageUrl = `http://localhost:3000/uploads/${req.file.filename}`;
-      }
-
-      const updatedBlog = await Blog.findByIdAndUpdate(
-        id,
-        {
-          Name,
-          Description,
-          liked,
-          imageUrl, 
-        },
-        { new: true }
-      );
-
+    const { Name, Description, liked } = req.body;
+    const existBlog = await Blog.findById(id);
+    if (!existBlog) {
       return res
-        .status(200)
-        .json({ message: "Blog Updated Successfully", Blog: updatedBlog });
+        .status(404)
+        .json({ message: "Blog with this id does not exist" });
+    }
+
+    if (!Name || !Description || liked === undefined) {
+      return res.status(400).json({
+        message: "All fields (Name, Description, liked) are required",
+      });
+    }
+
+    let imageUrl = existBlog.Image;
+
+    if (req.file) {
+      imageUrl = `http://localhost:3000/Uploader/${req.file.filename}`;
+    }
+
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      id,
+      {
+        Name,
+        Description,
+        liked,
+        Image: imageUrl,
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      message: "Blog updated successfully",
+      Blog: updatedBlog,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+module.exports = { updateBlog };
 
 const GetOneBlog = async (req, res) => {
   try {
