@@ -2,8 +2,8 @@ const Blog = require("../model/Blog");
 
 const Create = async (req, res) => {
   try {
-    const { Name, Description, liked } = req.body;
-    if (!Name || !Description || liked === undefined) {
+    const { Name, Description, liked ,Category} = req.body;
+    if (!Name || !Description ||!Category || liked === undefined) {
       return res.status(400).json({ message: "All fields are required" });
     }
     if (!req.file) {
@@ -14,6 +14,7 @@ const Create = async (req, res) => {
       Name,
       Description,
       liked,
+      Category,
       Image: imageUrl,
     });
     await newBlog.save();
@@ -41,7 +42,7 @@ const AllBlogs = async (req, res) => {
 const updateBlog = async (req, res) => {
   try {
     const { id } = req.params;
-    const { Name, Description, liked } = req.body;
+    const { Name, Description, liked ,Category } = req.body;
     const existBlog = await Blog.findById(id);
     if (!existBlog) {
       return res
@@ -49,7 +50,7 @@ const updateBlog = async (req, res) => {
         .json({ message: "Blog with this id does not exist" });
     }
 
-    if (!Name || !Description || liked === undefined) {
+    if (!Name || !Description ||!Category || liked === undefined) {
       return res.status(400).json({
         message: "All fields (Name, Description, liked) are required",
       });
@@ -67,6 +68,7 @@ const updateBlog = async (req, res) => {
         Name,
         Description,
         liked,
+        Category,
         Image: imageUrl,
       },
       { new: true }
@@ -82,7 +84,6 @@ const updateBlog = async (req, res) => {
   }
 };
 
-module.exports = { updateBlog };
 
 const GetOneBlog = async (req, res) => {
   try {

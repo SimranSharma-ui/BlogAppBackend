@@ -9,6 +9,10 @@ const BlogSchema = mongoose.Schema({
         type: String,
         required: true 
     },
+    Category:{
+        type:String,
+        require:true
+    },
     Image: {
         type: String,
         required: false  
