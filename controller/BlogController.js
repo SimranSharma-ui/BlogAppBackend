@@ -9,7 +9,7 @@ const Create = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: "Image is required" });
     }
-    const imageUrl = `http://localhost:3000/Uploader/${req.file.filename}`;
+    const imageUrl = `https://blogappbackend-8pw0.onrender.com/Uploader/${req.file.filename}`;
     const newBlog = new Blog({
       Name,
       Description,
