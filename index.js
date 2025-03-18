@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 app.use(
     cors({
-      origin:[process.env.FRONTEND_URI,],
+      origin:["https://blog-app-frontend-iota-one.vercel.app/",],
       credentials: true, 
       methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     })
