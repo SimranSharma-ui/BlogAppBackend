@@ -93,7 +93,7 @@ const Login = async (req, res) => {
         },
       });
   
-      const resetLink = `http://localhost:5173/reset-password/${token}`;
+      const resetLink = `https://blogappbackend-8pw0.onrender.com/reset-password/${token}`;
   
       const mailOptions = {
         from: process.env.EMAIL_USER,
