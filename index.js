@@ -15,28 +15,31 @@ const app = express();
 app.use(cookieParser());
 
 app.use(
-    cors({
-        origin: [
-            "https://blog-app-frontend-peach.vercel.app",  // ✅ Allow Vercel frontend
-            "http://localhost:5173"  // ✅ Allow local development
-        ],
-        credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-    })
+  cors({
+    origin: [
+      "https://blog-app-frontend-peach.vercel.app",
+      "https://blog-app-frontend-git-main-simrans-projects-dee52ad7.vercel.app/", // ✅ Allow Vercel frontend
+      "http://localhost:5173", // ✅ Allow local development
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
 );
 
-// ✅ Allow CORS for all routes
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", req.headers.origin);
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization");
-    
-    if (req.method === "OPTIONS") {
-        return res.sendStatus(200);
-    }
-    next();
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, Content-Type, Authorization"
+  );
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
 });
 
 app.use(express.json());
@@ -44,9 +47,9 @@ app.use(express.json());
 app.use("/uploader", express.static(path.join(__dirname, "Uploader")));
 
 mongoose
-    .connect(process.env.MONGO_URI)
-    .then(() => console.log("MongoDB Connected"))
-    .catch((err) => console.log("MongoDB Error:", err));
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log("MongoDB Error:", err));
 
 app.use("/api/User", router1);
 app.use("/api/Todo", router2);
