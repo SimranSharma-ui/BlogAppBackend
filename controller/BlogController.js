@@ -59,7 +59,7 @@ const updateBlog = async (req, res) => {
     let imageUrl = existBlog.Image;
 
     if (req.file) {
-      imageUrl = `http://localhost:3000/Uploader/${req.file.filename}`;
+      imageUrl = `https://blogappbackend-8pw0.onrender.com//Uploader/${req.file.filename}`;
     }
 
     const updatedBlog = await Blog.findByIdAndUpdate(
