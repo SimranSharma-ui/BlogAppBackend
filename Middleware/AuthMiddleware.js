@@ -1,14 +1,17 @@
 const jwt = require('jsonwebtoken');
 
 const AuthMiddleware = async (req, res, next) => {
-  const token = req.cookies.token || req.headers['authorization'];
+  let token = req.cookies.token || req.headers['authorization'];
+ 
 
   if (token && token.startsWith('Bearer ')) {
     token = token.split(' ')[1];
   }
 
   if (!token) {
+    console.log("Authentication faled");
     return res.status(401).json({ message: 'Authentication token is required' });
+    
   }
 
   try {
